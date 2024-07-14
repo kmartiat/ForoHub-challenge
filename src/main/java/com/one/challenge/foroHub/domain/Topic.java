@@ -2,6 +2,7 @@ package com.one.challenge.foroHub.domain;
 
 
 import com.one.challenge.foroHub.dto.request.RequestTopicDto;
+import com.one.challenge.foroHub.dto.request.RequestUpdateTopicDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,5 +41,15 @@ public class Topic {
         this.message = request.message();
         this.author = request.author();
         this.course = request.course();
+    }
+
+    public Topic updateData(RequestUpdateTopicDto body) {
+        if (body.title() != null) {
+            this.title = body.title();
+        }
+        if (body.message() != null) {
+            this.message = body.message();
+        }
+        return this;
     }
 }

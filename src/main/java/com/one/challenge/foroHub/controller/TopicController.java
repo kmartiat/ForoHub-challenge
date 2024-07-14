@@ -2,6 +2,7 @@ package com.one.challenge.foroHub.controller;
 
 import com.one.challenge.foroHub.domain.Topic;
 import com.one.challenge.foroHub.dto.request.RequestTopicDto;
+import com.one.challenge.foroHub.dto.request.RequestUpdateTopicDto;
 import com.one.challenge.foroHub.dto.response.ResponseTopicDto;
 import com.one.challenge.foroHub.repository.ITopicRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,5 +48,15 @@ public class TopicController {
     @GetMapping()
     public ResponseEntity<Page<ResponseTopicDto>> getAllTopics(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(repository.findAll(pageable).map(ResponseTopicDto::new));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ResponseTopicDto> updateTopic(@PathVariable Long id, @RequestBody RequestUpdateTopicDto body) {
+        Optional<Topic> topic = repository.findById(id);
+        if (topic.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        return ResponseEntity.ok(new ResponseTopicDto(topic.get().updateData(body)));
     }
 }
