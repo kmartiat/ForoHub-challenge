@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -58,5 +57,16 @@ public class TopicController {
             throw new EntityNotFoundException();
         }
         return ResponseEntity.ok(new ResponseTopicDto(topic.get().updateData(body)));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity deleteTopic(@PathVariable Long id) {
+        Optional<Topic> topic = repository.findById(id);
+        if (topic.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
