@@ -8,9 +8,10 @@ public record ResponseTopicDto(
         Long id,
         String title,
         String message,
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        Long authorId) {
 
     public ResponseTopicDto(Topic topic) {
-        this(topic.getId(), topic.getTitle(), topic.getMessage(), topic.getCreatedAt());
+        this(topic.getId(), topic.getTitle(), topic.getMessage(), topic.getCreatedAt(), topic.getAuthor().getId());
     }
 }

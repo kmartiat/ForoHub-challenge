@@ -29,18 +29,24 @@ public class Topic {
     @Column(unique = true)
     private String message;
 
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+
     private String course;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Topic(RequestTopicDto request) {
+    public Topic(RequestTopicDto request, User user) {
         this.title = request.title();
         this.message = request.message();
-        this.author = request.author();
+        this.author = user;
         this.course = request.course();
+    }
+
+    public Topic(RequestTopicDto request) {
     }
 
     public Topic updateData(RequestUpdateTopicDto body) {

@@ -1,10 +1,12 @@
 package com.one.challenge.foroHub.controller;
 
 import com.one.challenge.foroHub.domain.Topic;
+import com.one.challenge.foroHub.domain.User;
 import com.one.challenge.foroHub.dto.request.RequestTopicDto;
 import com.one.challenge.foroHub.dto.request.RequestUpdateTopicDto;
 import com.one.challenge.foroHub.dto.response.ResponseTopicDto;
 import com.one.challenge.foroHub.repository.ITopicRepository;
+import com.one.challenge.foroHub.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -26,11 +28,18 @@ public class TopicController {
     @Autowired
     ITopicRepository repository;
 
+    @Autowired
+    IUserRepository userRepository;
+
     @PostMapping
     @Transactional
     public ResponseEntity<ResponseTopicDto> saveTopic(@RequestBody @Valid RequestTopicDto request,
                                                       UriComponentsBuilder uriComponentsBuilder) {
-        Topic topic = repository.save(new Topic(request));
+        Optional<User> user = userRepository.findById(request.authorId());
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Topic topic = repository.save(new Topic(request, user.get()));
         URI uri = uriComponentsBuilder.path("/api/v1/topics/{id}").buildAndExpand(topic.getId()).toUri();
         return ResponseEntity.created(uri).body(new ResponseTopicDto(topic));
     }
