@@ -7,6 +7,8 @@ import com.one.challenge.foroHub.dto.request.RequestUpdateTopicDto;
 import com.one.challenge.foroHub.dto.response.ResponseTopicDto;
 import com.one.challenge.foroHub.repository.ITopicRepository;
 import com.one.challenge.foroHub.repository.IUserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/topics")
+@SecurityRequirement(name = "bearer-key")
 public class TopicController {
 
     @Autowired
